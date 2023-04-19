@@ -1,0 +1,22 @@
+{
+  "name": "SuggestON",
+  "version": "3.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "latest",
+    "discord-api-types": "latest",
+    "discord.js": "latest",
+    "express": "latest",
+    "got": "11.8.5"
+  },
+  "devDependencies": {
+    "node": "^16.13.0"
+  },
+  "description": ""
+}
