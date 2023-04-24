@@ -32,12 +32,10 @@ const {
 	WebhookClient,
 	EmbedBuilder,
 } = require("discord.js");
-const UUID = Date.now();
-// got(
-//   "https://hf.space/embed/CodeON/Old-Instances-Be-Gone/+/setid/?space=SuggestON&uuid=" +
-//     UUID
-// );
-//console.log("UUID: " + UUID);
+const UUID = Date.now() + "";
+got("https://oibg-1-t2290424.deta.app/setid/?space=SuggestON&uuid=" + UUID, {
+	headers: { auth: process.env.OIBG },
+});
 let db = new Database();
 db.log(true);
 const errLog = new WebhookClient({ url: process.env.ERROR_LOGGER });
@@ -113,7 +111,7 @@ client.login(token).catch((err) => {
 
 client.on("ready", () => {
 	console.log("Logged in as " + client.user.tag + "!");
-	client.user.setActivity("suggestions!", { type: "LISTENING" });
+	client.user.setActivity("suggestions!", { type: 2 });
 	for (const file of commandFiles) {
 		const command = require(`./Commands/${file}`);
 		if (command.data != undefined) {
@@ -140,7 +138,15 @@ client.on("ready", () => {
 		}
 	})();
 	setInterval(async () => {
-		//console.log("db saved");
+		let lastuuid = await got(
+			"https://oibg-1-t2290424.deta.app/getid/?space=SuggestON",
+			{
+				headers: { auth: process.env.OIBG },
+			}
+		);
+		if (lastuuid != UUID && /[0-9]+/.test(lastuuid)) {
+			process.exit(0);
+		}
 		await db.save();
 	}, 60000);
 });
@@ -674,15 +680,6 @@ http
 		res.end("oi!");
 	})
 	.listen(7860, () => console.log("http server up and running"));
-
-// setInterval(async function () {
-//   let lastuuid = await got(
-//     "https://hf.space/embed/CodeON/Old-Instances-Be-Gone/+/getid/?space=SuggestON"
-//   ).text();
-//   if (lastuuid != UUID && /[0-9]+/.test(lastuuid)) {
-//     process.exit(0);
-//   }
-// }, 60000);
 
 process.on("uncaughtException", (err, origin) => {
 	console.log(err);
