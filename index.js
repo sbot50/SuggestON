@@ -116,6 +116,10 @@ client.on("ready", () => {
     await db.load();
     let num = 0;
 		try {
+      await rest.put(
+        Routes.applicationGuildCommands(clientId, guildId),
+        { body: [] },
+      )
 			console.log(
 				`Started refreshing ${commands.length} application (/) commands.`
 			);
@@ -135,20 +139,6 @@ client.on("ready", () => {
     //console.log("db saved");
     await db.save();
   }, 60000);
-});
-
-client.on("guildCreate", (guild) => {
-  let guildId = guild.id;
-  db.write(guild.id, {});
-  (async () => {
-    try {
-      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-        body: commands,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  })();
 });
 
 client.on("interactionCreate", async (interaction) => {
