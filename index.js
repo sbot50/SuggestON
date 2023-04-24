@@ -115,23 +115,21 @@ client.on("ready", () => {
   (async () => {
     await db.load();
     let num = 0;
-    client.guilds.cache.forEach((guild) => {
-      if (guild.name != "BladeBotList - Bots") {
-        let guildId = guild.id;
-        if (!db.has(guild.id)) {
-          db.write(guild.id, {});
-        }
-        (async () => {
-          try {
-            await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-              body: commands,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-      }
-    });
+		try {
+			console.log(
+				`Started refreshing ${commands.length} application (/) commands.`
+			);
+
+			let cmds = await rest.put(Routes.applicationCommands(clientId), {
+				body: commands,
+			});
+
+			console.log(
+				`Successfully reloaded ${cmds.length} application (/) commands.`
+			);
+		} catch (error) {
+			console.log(error);
+		}
   })();
   setInterval(async () => {
     //console.log("db saved");
@@ -171,6 +169,7 @@ client.on("interactionCreate", async (interaction) => {
   let member = await guild.members.fetch(interaction.member.user.id);
   let cmd;
   if (interaction.type == 2) {
+    await interaction.deferReply();
     let argslist = await interaction.options._hoistedOptions;
     let args = {};
     for (let arg of argslist) {
@@ -188,7 +187,6 @@ client.on("interactionCreate", async (interaction) => {
     if (!hasperms) {
       return;
     }
-    await interaction.deferReply();
     try {
       await cmd.execute({
         client,
