@@ -42,7 +42,7 @@ let db = new Database();
 db.log(true);
 const errLog = new WebhookClient({ url: process.env.ERROR_LOGGER });
 
-async function checkperms(interaction, needed, channel, guild) {
+async function checkperms(interaction, needed, channel, guild, deferred) {
 	if (interaction) {
 		guild = await client.guilds.cache.get(interaction.guildId);
 		channel = await guild.channels.cache.get(interaction.channelId);
@@ -85,11 +85,19 @@ async function checkperms(interaction, needed, channel, guild) {
 				},
 			]);
 			if (interaction) {
-				await interaction.editReply({
-					content: " ",
-					embeds: [embed],
-					ephemeral: true,
-				});
+        if (deferred) {
+				  await interaction.editReply({
+					  content: " ",
+					  embeds: [embed],
+					  ephemeral: true,
+				  });
+        } else {
+          await interaction.reply({
+					  content: " ",
+					  embeds: [embed],
+					  ephemeral: true,
+				  });
+        }
 			}
 			return false;
 		}
@@ -169,7 +177,7 @@ client.on("interactionCreate", async (interaction) => {
 			}
 		}
 		let needed = cmd.permissions;
-		let hasperms = await checkperms(interaction, needed);
+		let hasperms = await checkperms(interaction, needed, deferred=1);
 		if (!hasperms) {
 			return;
 		}
