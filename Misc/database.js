@@ -36,16 +36,23 @@ class Database {
       this.load();
       return console.info("[Db] Not loaded, load db.");
     }
-    let res = await got
-      .put(`https://database.deta.sh/v1/${id}/SuggestON/items`, {
-        headers: {
-          "X-API-Key": key,
-        },
-        json: {
-          items: Object.entries(db).map(([key, value]) => ({ key, value })),
-        },
-      })
-      .json();
+    let db = Object.entries(this.data).map(([key, value]) => ({ key, value }));
+    let promises = [];
+    for (let i = 0; i < db.length; i += 25) {
+      let items = db.slice(i, i + 25);
+      console.log(items);
+      promises.push(
+        got
+          .put(`https://database.deta.sh/v1/${id}/SuggestON/items`, {
+            headers: {
+              "X-API-Key": key,
+            },
+            json: { items: items },
+          })
+          .json()
+      );
+    }
+    await Promise.all(promises);
   }
 
   read(name) {
