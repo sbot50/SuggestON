@@ -119,7 +119,7 @@ client.on("ready", () => {
 		}
 	}
 	(async () => {
-		await db.load();
+		await db.load(client.guilds.cache.map(guild => guild.id));
 		let num = 0;
 		try {
 			console.log(
