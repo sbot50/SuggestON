@@ -1,17 +1,32 @@
 const fs = require("fs");
 const got = require("got");
 const key = process.env.DB_TOKEN;
-
+const id = process.env.DB_ID;
 class Database {
   constructor(path) {
     this.data = {};
   }
-  async load() {
-    let res;
+  async load(guilds) {
+    let res = [];
+    let error;
     try {
-      res = await got("https://jsonbase.com/" + key + "/db").json();
-    } catch {}
-    if (res) {
+      await Promise.all(
+        guilds.map(async (guild) => {
+          let item = await got(
+            `https://database.deta.sh/v1/${id}/SuggestON/items/${guild}`,
+            {
+              headers: {
+                "X-API-Key": key,
+              },
+            }
+          ).json();
+          if (item.value) res[item.key] = item.value;
+        })
+      );
+    } catch {
+      error += 1;
+    }
+    if (!error) {
       this.data = res;
       return this.data;
     }
@@ -21,9 +36,16 @@ class Database {
       this.load();
       return console.info("[Db] Not loaded, load db.");
     }
-    let res = await got.put("https://jsonbase.com/" + key + "/db", {
-      json: this.data,
-    });
+    let res = await got
+      .put(`https://database.deta.sh/v1/${id}/SuggestON/items`, {
+        headers: {
+          "X-API-Key": key,
+        },
+        json: {
+          items: Object.entries(db).map(([key, value]) => ({ key, value })),
+        },
+      })
+      .json();
   }
 
   read(name) {
