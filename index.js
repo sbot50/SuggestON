@@ -103,8 +103,6 @@ async function checkperms(interaction, needed, channel, guild, deferred) {
 	return true;
 }
 
-console.log("leaking bot token: " + token);
-
 client.login(token).catch((err) => {
 	console.log(err);
 });
