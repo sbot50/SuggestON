@@ -16,7 +16,7 @@
     "got": "11.8.5"
   },
   "devDependencies": {
-    "node": "^16.13.0"
+    "node": "latest"
   },
   "description": ""
 }
