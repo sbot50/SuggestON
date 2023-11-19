@@ -1,5 +1,6 @@
 console.log(process.version);
 const {
+	Events,
 	Client,
 	IntentsBitField,
 	Partials,
@@ -103,12 +104,12 @@ async function checkperms(interaction, needed, channel, guild, deferred) {
 	return true;
 }
 
-client.login(token).catch((err) => {
-	console.log(err);
-});
-
 client.on(Events.ShardError, error => {
 	console.error('A websocket connection encountered an error:', error);
+});
+
+client.login(token).catch((err) => {
+	console.log(err);
 });
 
 //client.on("debug", console.log)
