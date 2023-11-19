@@ -42,7 +42,6 @@ class Database {
     let promises = [];
     for (let i = 0; i < db.length; i += 25) {
       let items = db.slice(i, i + 25);
-      console.log(items);
       promises.push(
         got
           .put(`https://database.deta.sh/v1/${id}/SuggestON/items`, {
