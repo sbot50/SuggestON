@@ -107,6 +107,10 @@ client.login(token).catch((err) => {
 	console.log(err);
 });
 
+client.on(Events.ShardError, error => {
+	console.error('A websocket connection encountered an error:', error);
+});
+
 //client.on("debug", console.log)
 
 client.on("ready", () => {
