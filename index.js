@@ -152,6 +152,7 @@ client.on("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
+	console.log(interaction);
 	let guild = await client.guilds.cache.get(interaction.guildId);
 	let channel = await guild.channels.cache.get(interaction.channelId);
 	let needed = [
@@ -281,6 +282,7 @@ client.on("messageCreate", async (message) => {
 	let channel = message.channel;
 	let guilddb = await db.read(guild.id);
 	let author = message.author;
+	console.log
 	if (channel.id in guilddb) {
 		let channeldb = guilddb[channel.id];
 		if (channeldb.id == undefined) {
