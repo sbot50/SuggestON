@@ -112,8 +112,6 @@ client.login(token).catch((err) => {
 	console.log(err);
 });
 
-//client.on("debug", console.log)
-
 client.on("ready", () => {
 	console.log("Logged in as " + client.user.tag + "!");
 	client.user.setActivity("suggestions!", { type: 2 });
@@ -285,9 +283,9 @@ client.on("messageCreate", async (message) => {
 	let guild = message.guild;
 	if (!db.has(guild.id)) return;
 	let channel = message.channel;
+	if (channel.thread) return;
 	let guilddb = await db.read(guild.id);
 	let author = message.author;
-	console.log
 	if (channel.id in guilddb) {
 		let channeldb = guilddb[channel.id];
 		if (channeldb.id == undefined) {
