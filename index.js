@@ -338,7 +338,7 @@ client.on("messageCreate", async (message) => {
 			embedcolor = channeldb.hex;
 		}
 		let embed = new EmbedBuilder().setColor(embedcolor).setAuthor({
-			name: author.tag,
+			name: (author.discriminator == 0) ? "@" + author.tag : author.username + "#" + author.discriminator,
 			iconURL: avatar + "?id=" + author.id,
 		});
 		if (text && text.length != 0) {
