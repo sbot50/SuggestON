@@ -487,8 +487,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
 		}
 		if (
 			(channeldb.selftoggle == undefined || channeldb.selftoggle == "false") &&
-			userid == user.id &&
-			!(areaction in channeldb.custom)
+			userid == user.id
 		) {
 			reaction.users.remove(user.id);
 			return;
