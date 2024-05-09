@@ -155,7 +155,6 @@ client.on("ready", () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-	console.log(interaction);
 	let guild = await client.guilds.cache.get(interaction.guildId);
 	let channel = await guild.channels.cache.get(interaction.channelId);
 	let needed = [
@@ -183,14 +182,17 @@ client.on("interactionCreate", async (interaction) => {
 			if (file == interaction.commandName + ".js") {
 				let path = "./Commands/" + interaction.commandName + ".js";
 				cmd = require(path);
+				console.log(path)
 				break;
 			}
 		}
 		let needed = cmd.permissions;
 		let hasperms = await checkperms(interaction, needed, deferred=1);
+		console.log(hasperms)
 		if (!hasperms) {
 			return;
 		}
+		console.log(cmd)
 		try {
 			await cmd.execute({
 				client,
